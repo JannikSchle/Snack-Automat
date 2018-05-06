@@ -149,7 +149,7 @@ public class Steuerung {
     }
 
     private void chooseSnack(){
-
+        listOfProducts = ProductBin.deleteProductsFromListWithMenge0(listOfProducts);
         try{
             Scanner scanner = new Scanner(System.in);
             if (!listOfProducts.isEmpty()){

@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by Jannik on 24.04.2018.
  */
 public class ProductList {
+    // Creates a product form string inputs and puts them into the "listOfProducts"
     public static ArrayList<Product> putProductFromInputInProductList(ArrayList<Product> listOfProducts ,String prodBez, String preis, String menge){
         try{
             Integer preisInt = Integer.valueOf(preis);

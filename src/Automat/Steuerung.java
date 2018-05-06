@@ -13,6 +13,7 @@ public class Steuerung {
     private ArrayList<Coin> geldsack = Geldsack.createGeldsack();
     private ArrayList<Product> listOfProducts = new ArrayList<>();
 
+    // Main menue to navigate through the skils
     public void hauptmenue(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Was möchten sie machen?");
@@ -21,6 +22,7 @@ public class Steuerung {
         System.out.println("[3] Wechselgeld auffüllen");
         System.out.println("[4] Snack auswählen");
         String eingabe = scanner.nextLine();
+        // Check user selection
         if(eingabe.equals("1")||eingabe.equals("2")||eingabe.equals("3")||eingabe.equals("4"))
         switch(eingabe){
             case "1":
@@ -55,7 +57,7 @@ public class Steuerung {
         System.out.println("wie viele " + prodBez + " möchten sie hinzufügen?");
         String menge = scanner.nextLine();
 
-        //pass the input and gets the old listOfArrays
+        //pass the input and gets the new listOfProducts
         listOfProducts = ProductList.putProductFromInputInProductList(listOfProducts,prodBez,preis,menge);
         return listOfProducts;
     }
@@ -72,7 +74,9 @@ public class Steuerung {
                 System.out.println("[0] Zurück zum Hauptmenü");
                 String eingabeUser  = scanner.nextLine();
                 Integer userAuswahl = Integer.parseInt(eingabeUser);
+                // Check user selection
                 if(userAuswahl <= listOfProducts.size()&&userAuswahl > 0){
+                    // Handles the input amount
                     System.out.println("Aktuell sind noch " + listOfProducts.get(userAuswahl - 1).getMenge() + " " + listOfProducts.get(userAuswahl - 1).getProductBez() + " verfügbar.");
                     System.out.println("Wie viele " + listOfProducts.get(userAuswahl - 1).getProductBez() + " möchten sie hinzufügen?");
                     String eingabeMenge  = scanner.nextLine();
@@ -110,7 +114,7 @@ public class Steuerung {
             System.out.println("Bitte valide Eingaben tätigen.");
         }
     }
-
+    // Method to refill the exchange money
     private void fillChange(){
         try {
             Scanner scanner = new Scanner(System.in);
@@ -121,23 +125,25 @@ public class Steuerung {
             System.out.println("[0] Zurück zum Hauptmenü");
             String eingabeUser  = scanner.nextLine();
             Integer userAuswahl = Integer.parseInt(eingabeUser);
+            // Check user selection
             if(userAuswahl <= geldsack.size() && userAuswahl > 0) {
-                    System.out.println("Wie viele Geldstücke möchten sie hinzufügen?");
-                    String eingabeMenge = scanner.nextLine();
-                    Integer userMenge = Integer.parseInt(eingabeMenge);
-                    if(userMenge <= 1000){
-                        geldsack.get(userAuswahl - 1).setMenge(geldsack.get(userAuswahl - 1).getMenge() + userMenge);
-                        System.out.println("Vielen Dank! Die neue Stückzahl beträgt " + geldsack.get(userAuswahl - 1).getMenge() + ".");
-                    }
-                    else if(userMenge > 1000){
-                        System.out.println("Es können maximal 1000 Geldstücke pro Aktion aufgefüllt werden.");
-                        fillChange();
-                    }
-                    else{
-                        System.out.println("Bitte tätigen sie eine geeignete Mengenangabe unter 1000.");
-                        fillChange();
-                    }
+                //
+                System.out.println("Wie viele Geldstücke möchten sie hinzufügen?");
+                String eingabeMenge = scanner.nextLine();
+                Integer userMenge = Integer.parseInt(eingabeMenge);
+                if(userMenge <= 1000){
+                    geldsack.get(userAuswahl - 1).setMenge(geldsack.get(userAuswahl - 1).getMenge() + userMenge);
+                    System.out.println("Vielen Dank! Die neue Stückzahl beträgt " + geldsack.get(userAuswahl - 1).getMenge() + ".");
                 }
+                else if(userMenge > 1000){
+                    System.out.println("Es können maximal 1000 Geldstücke pro Aktion aufgefüllt werden.");
+                    fillChange();
+                }
+                else{
+                    System.out.println("Bitte tätigen sie eine geeignete Mengenangabe unter 1000.");
+                    fillChange();
+                }
+            }
             else if(userAuswahl == 0){}
             else{
                 System.out.println("Bitte zwischen 1 und " + (listOfProducts.size() - 1) + " wählen.");
@@ -148,6 +154,7 @@ public class Steuerung {
         }
     }
 
+    // Process of buying a product
     private void chooseSnack(){
         listOfProducts = ProductBin.deleteProductsFromListWithMenge0(listOfProducts);
         try{
@@ -160,14 +167,16 @@ public class Steuerung {
                 System.out.println("[0] Zurück zum Hauptmenü");
                 String eingabe = scanner.nextLine();
                 Integer eingabeInt = Integer.parseInt(eingabe);
+                // Check user selection
                 if(eingabeInt <= listOfProducts.size() && eingabeInt > 0){
-                    listOfProducts.get(eingabeInt - 1).setMenge(listOfProducts.get(eingabeInt - 1).getMenge() - 1);
                     System.out.println("Das macht dann " + (float)listOfProducts.get(eingabeInt - 1).getPrice()/100 + "€.");
+                    // Confirm selection
                     System.out.println("Sind sie sich sicher?");
                     System.out.println("[1] Ja");
                     String bestätigung = scanner.nextLine();
                     Integer bestaetigungInt = Integer.parseInt(eingabe);
                     if(bestaetigungInt == 1){
+                        listOfProducts.get(eingabeInt - 1).setMenge(listOfProducts.get(eingabeInt - 1).getMenge() - 1);
                         geldsack = Bezahlvorgang.bezahlen(geldsack, listOfProducts.get(eingabeInt - 1).getPrice());
                     }
                     else{
